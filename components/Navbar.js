@@ -11,6 +11,8 @@ function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const [showDropdown, setshowDropdown] = useState(false);
+
   const { data: session } = useSession();
   // if (session) {
   //   return (
@@ -62,25 +64,25 @@ function Navbar() {
             } w-full md:block md:w-auto`}
             id="navbar-default"
           >
-            <ul className="font-medium flex flex-col p-4 py-10 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="font-medium flex flex-col md:items-center md:justify-center p-4 py-10 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <Link
                   href="/"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:hover:text-blue-700 "
+                  className="block py-2 px-3 text-white rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:hover:text-blue-700 "
                   aria-current="page"
                 >
                   Home
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  About
-                </Link>
-              </li>
-              <li>
+              {/* <li>
+                  <Link
+                    href="/about"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >
+                    About
+                  </Link>
+                </li> */}
+              {/* <li>
                 <Link
                   href="/service"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
@@ -95,24 +97,93 @@ function Navbar() {
                 >
                   Contact
                 </Link>
-              </li>
+              </li> */}
 
               {/* ***************************************************************** */}
 
-              <li className="flex gap-8">
+              <li className="flex gap-8 items-center justify-center relative">
                 {session && (
-                  <Link
-                    href="/dashboard"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent  "
-                  >
-                    <button>Dashboard</button>
-                  </Link>
+                  <>
+                    <button
+                      onClick={() => {
+                        setshowDropdown(!showDropdown);
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => {
+                          setshowDropdown(false);
+                        }, 300);
+                      }}
+                      id="dropdownDefaultButton"
+                      data-dropdown-toggle="dropdown"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      type="button"
+                    >
+                      Welcome {session.user.email}
+                      <svg
+                        className="w-2.5 h-2.5 ms-3"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 4 4 4-4"
+                        />
+                      </svg>
+                    </button>
+
+                    <div
+                      id="dropdown"
+                      className={`z-10 ${
+                        showDropdown ? "" : "hidden"
+                      } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute top-12`}
+                    >
+                      <ul
+                        className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownDefaultButton"
+                      >
+                        <li>
+                          <Link
+                            href="/dashboard"
+                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          >
+                            Dashboard
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="#"
+                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          >
+                            Your Profile
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link
+                            onClick={() => {
+                              signOut();
+                            }}
+                            href="#"
+                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          >
+                            Logout
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </>
                 )}
-                {session && (
+
+                {/* {session && (
                   <button onClick={()=>{signOut()}} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">
                     Logout
                   </button>
-                )}
+                )} */}
 
                 {!session && (
                   <Link
