@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,6 +10,16 @@ function Navbar() {
   const handleToggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const { data: session } = useSession();
+  // if (session) {
+  //   return (
+  //     <>
+  //       Signed in as {session.user.email} <br />
+  //       <button onClick={() => signOut()}>Sign out</button>
+  //     </>
+  //   );
+  // }
 
   return (
     <>
@@ -85,13 +96,32 @@ function Navbar() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/login"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Login
-                </Link>
+
+              {/* ***************************************************************** */}
+
+              <li className="flex gap-8">
+                {session && (
+                  <Link
+                    href="/dashboard"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent  "
+                  >
+                    <button>Dashboard</button>
+                  </Link>
+                )}
+                {session && (
+                  <button onClick={()=>{signOut()}} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ">
+                    Logout
+                  </button>
+                )}
+
+                {!session && (
+                  <Link
+                    href="/login"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent  "
+                  >
+                    <button>Login</button>
+                  </Link>
+                )}
               </li>
             </ul>
           </div>
